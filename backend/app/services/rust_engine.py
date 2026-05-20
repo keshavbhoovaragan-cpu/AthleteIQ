@@ -1,13 +1,10 @@
-"""
-rust_engine.py — Python bridge to the Rust fantasy scoring binary.
-Falls back to pure Python if the binary isn't compiled yet.
-"""
 import subprocess, json, os, logging, math
 from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
-BINARY = os.path.abspath(os.path.join(os.path.dirname(__file__),
-    "../../../../rust-engine/target/release/fantasy-engine"))
+
+# Absolute path — works regardless of working directory
+BINARY = os.path.expanduser("~/AthleteIQ/rust-engine/target/release/fantasy-engine")
 
 def _python_fallback(players):
     def score(p):
@@ -29,7 +26,7 @@ def _python_fallback(players):
 def score_players(players):
     if not players: return []
     if not os.path.exists(BINARY):
-        logger.info("Rust binary not found — Python fallback. Run: cd rust-engine && cargo build --release")
+        logger.info("Rust binary not found — Python fallback")
         return _python_fallback(players)
     try:
         result = subprocess.run([BINARY], input=json.dumps(players),
