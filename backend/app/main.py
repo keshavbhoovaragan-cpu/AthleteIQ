@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import players, stats, scouting, auth, rankings, analytics, trades, injuries, streaks
+from app.api.routes import players, stats, scouting, auth, rankings, analytics, trades, injuries, streaks, engine
 
-app = FastAPI(title="AthleteIQ API", version="3.0.0")
+app = FastAPI(title="AthleteIQ API", version="3.0.0",
+    description="NBA Intelligence Platform — FastAPI + Rust + SQLite + Redis + nba_api")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.include_router(players.router,   prefix="/api/players",   tags=["players"])
 app.include_router(stats.router,     prefix="/api/stats",     tags=["stats"])
@@ -13,7 +14,11 @@ app.include_router(analytics.router, prefix="/api/analytics", tags=["analytics"]
 app.include_router(trades.router,    prefix="/api/trades",    tags=["trades"])
 app.include_router(injuries.router,  prefix="/api/injuries",  tags=["injuries"])
 app.include_router(streaks.router,   prefix="/api/streaks",   tags=["streaks"])
+app.include_router(engine.router,    prefix="/api/engine",    tags=["rust-engine"])
 
 @app.get("/api/health")
 async def health():
-    return {"status":"ok","version":"3.0.0","features":9}
+    import os
+    binary = os.path.abspath("../rust-engine/target/release/fantasy-engine")
+    return {"status":"ok","version":"3.0.0","rust_engine":os.path.exists(binary),
+            "stack":["FastAPI","Rust","SQLite","Redis","nba_api","Python 3.11"]}
