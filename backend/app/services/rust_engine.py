@@ -3,8 +3,16 @@ from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
 
-# Absolute path — works regardless of working directory
-BINARY = os.path.expanduser("~/AthleteIQ/rust-engine/target/release/fantasy-engine")
+def _find_binary() -> str:
+    candidates = [
+        os.environ.get("RUST_BINARY", ""),
+        "/usr/local/bin/fantasy-engine",
+        os.path.expanduser("~/AthleteIQ/rust-engine/target/release/fantasy-engine"),
+    ]
+    for path in candidates:
+        if path and os.path.exists(path):
+            return path
+    return ""
 
 def _python_fallback(players):
     def score(p):
@@ -17,7 +25,7 @@ def _python_fallback(players):
     scored = sorted([(score(p),p) for p in players], key=lambda x: x[0], reverse=True)
     scores = [s for s,_ in scored]
     mean = sum(scores)/len(scores) if scores else 0
-    std = math.sqrt(sum((x-mean)**2 for x in scores)/len(scores)) if scores else 1
+    std = math.sqrt(sum((x-mean)**2 for x in scores)/len(scores)) if len(scores)>1 else 1
     return [{**p,"fantasy_score":fs,"grade":grade(fs),"tier":tier(fs),"rank":i+1,
              "percentile":round(len([s for s in scores if s<=fs])/len(scores)*100),
              "z_score":round((fs-mean)/std,2) if std else 0}
@@ -25,28 +33,29 @@ def _python_fallback(players):
 
 def score_players(players):
     if not players: return []
-    if not os.path.exists(BINARY):
-        logger.info("Rust binary not found — Python fallback")
+    binary = _find_binary()
+    if not binary:
         return _python_fallback(players)
     try:
-        result = subprocess.run([BINARY], input=json.dumps(players),
+        result = subprocess.run([binary], input=json.dumps(players),
             capture_output=True, text=True, timeout=10)
-        if result.returncode != 0:
-            return _python_fallback(players)
+        if result.returncode != 0: return _python_fallback(players)
         return json.loads(result.stdout)
     except Exception as e:
         logger.warning(f"Rust engine failed ({e}) — Python fallback")
         return _python_fallback(players)
 
 def benchmark():
-    if not os.path.exists(BINARY):
+    binary = _find_binary()
+    if not binary:
         return {"error":"Rust binary not compiled","hint":"cd rust-engine && cargo build --release"}
-    r = subprocess.run([BINARY,"--benchmark"], capture_output=True, text=True)
-    return {"output":r.stderr.strip(),"binary":BINARY}
+    r = subprocess.run([binary,"--benchmark"], capture_output=True, text=True)
+    return {"output":r.stderr.strip(),"binary":binary}
 
 def get_grade(score):
-    if os.path.exists(BINARY):
-        r = subprocess.run([BINARY,"--grade",str(score)], capture_output=True, text=True)
+    binary = _find_binary()
+    if binary:
+        r = subprocess.run([binary,"--grade",str(score)], capture_output=True, text=True)
         if r.returncode==0: return json.loads(r.stdout)
     def grade(s): return "S" if s>=60 else "A" if s>=50 else "B" if s>=40 else "C" if s>=30 else "D"
     def tier(s): return "Elite" if s>=60 else "Star" if s>=50 else "Solid" if s>=40 else "Depth" if s>=28 else "Streamer"

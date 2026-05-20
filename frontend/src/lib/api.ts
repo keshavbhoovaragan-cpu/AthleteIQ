@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
-});
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const api = axios.create({ baseURL: BASE_URL });
 
 export const searchPlayers = async (name: string) => {
   const { data } = await api.get("/api/players/search", { params: { name } });
