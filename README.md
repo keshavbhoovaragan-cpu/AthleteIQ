@@ -156,5 +156,5 @@ cd frontend && npm install && npm run dev
 
 ---
 
-*Built by Keshav Bhoovaragan · Full-Stack Engineer · Info Risk Management Minor*
+*Built by Keshav Bhoovaragan · Full-Stack Engineer · Info Risk Management*
 *Stack: Next.js · TypeScript · FastAPI · Python · Rust · SQLite · Redis · Bash*
