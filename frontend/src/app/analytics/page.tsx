@@ -23,7 +23,7 @@ export default function AnalyticsPage() {
   const maxFS = players.length ? Math.max(...players.map(p=>p.fantasy_score)) : 1;
 
   return (
-    <main style={{minHeight:"100vh",background:"#07070e"}}>
+    <main style={{minHeight:"100vh",background:"transparent"}}>
       <NavBar/>
       <div style={{position:"fixed",top:"15%",right:"10%",width:500,height:500,background:"radial-gradient(circle,rgba(167,139,250,0.04) 0%,transparent 70%)",pointerEvents:"none",zIndex:0}}/>
       <div style={{maxWidth:1080,margin:"0 auto",padding:"40px 24px",position:"relative",zIndex:1}}>

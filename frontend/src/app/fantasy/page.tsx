@@ -102,7 +102,7 @@ export default function FantasyPage() {
   };
 
   return (
-    <main style={{minHeight:"100vh",background:"#07070e"}}>
+    <main style={{minHeight:"100vh",background:"transparent"}}>
       <NavBar/>
       {toast&&(<div style={{position:"fixed",top:20,right:20,zIndex:999,padding:"13px 20px",borderRadius:12,background:toast.type==="error"?"rgba(239,68,68,0.13)":"rgba(34,197,94,0.13)",border:`1px solid ${toast.type==="error"?"rgba(239,68,68,0.4)":"rgba(34,197,94,0.4)"}`,color:toast.type==="error"?"#fca5a5":"#86efac",fontSize:13,fontWeight:600,backdropFilter:"blur(16px)",boxShadow:"0 8px 32px rgba(0,0,0,0.5)",maxWidth:340}}>{toast.type==="error"?"⚠ ":"✓ "}{toast.msg}</div>)}
       <div style={{position:"fixed",top:"20%",left:"10%",width:500,height:500,background:"radial-gradient(circle,rgba(96,165,250,0.03) 0%,transparent 70%)",pointerEvents:"none",zIndex:0}}/>

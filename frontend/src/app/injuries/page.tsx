@@ -25,7 +25,7 @@ export default function InjuriesPage() {
   const filtered = filter==="All"?INJURIES:INJURIES.filter(i=>i.status===filter);
 
   return (
-    <main style={{minHeight:"100vh",background:"#07070e"}}>
+    <main style={{minHeight:"100vh",background:"transparent"}}>
       <NavBar/>
       <div style={{position:"fixed",top:"15%",left:"5%",width:400,height:400,background:"radial-gradient(circle,rgba(239,68,68,0.03) 0%,transparent 70%)",pointerEvents:"none",zIndex:0}}/>
       <div style={{maxWidth:900,margin:"0 auto",padding:"40px 24px",position:"relative",zIndex:1}}>

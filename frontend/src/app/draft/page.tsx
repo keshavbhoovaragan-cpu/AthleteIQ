@@ -50,7 +50,7 @@ export default function DraftPage() {
   const toggle=(pick:number)=>setMyPicks(prev=>prev.includes(pick)?prev.filter(p=>p!==pick):[...prev,pick]);
 
   return (
-    <main style={{minHeight:"100vh",background:"#07070e"}}>
+    <main style={{minHeight:"100vh",background:"transparent"}}>
       <NavBar/>
       <div style={{position:"fixed",bottom:"10%",right:"5%",width:400,height:400,background:"radial-gradient(circle,rgba(96,165,250,0.03) 0%,transparent 70%)",pointerEvents:"none",zIndex:0}}/>
       <div style={{maxWidth:1060,margin:"0 auto",padding:"40px 24px",position:"relative",zIndex:1}}>
