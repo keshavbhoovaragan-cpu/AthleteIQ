@@ -101,6 +101,26 @@ export default function FantasyPage() {
     return {bg:"rgba(96,165,250,0.1)",fg:"#60a5fa"};
   };
 
+
+  const exportCSV = () => {
+    const headers = ['Slot','Player','Position','Team','PTS','REB','AST','STL','BLK','Fantasy Score','Grade'];
+    const rows = ROSTER_SLOTS.map((s,i) => {
+      const p = roster[i];
+      if (!p) return [s.slot,'(empty)','','','','','','','','',''];
+      const l = p.latest || {};
+      const score = l.fantasy_score || 0;
+      const grade = score>=60?'S':score>=50?'A':score>=40?'B':score>=30?'C':'D';
+      return [s.slot,p.first_name+' '+p.last_name,p.position||'',l.team||'',l.pts||'',l.reb||'',l.ast||'',l.stl||'',l.blk||'',score,grade];
+    });
+    const csv = [headers,...rows].map(r=>r.join(',')).join('\n');
+    const blob = new Blob([csv],{type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url; a.download='athleteiq-roster.csv'; a.click();
+    URL.revokeObjectURL(url);
+    showToast('Roster exported as CSV','success');
+  };
+
   return (
     <main style={{minHeight:"100vh",background:"transparent"}}>
       <NavBar/>
@@ -114,6 +134,7 @@ export default function FantasyPage() {
             <p style={{color:"rgba(255,255,255,0.28)",fontSize:13}}>2024-25 · Standard scoring · Real NBA positions from NBA.com</p>
           </div>
           <div style={{display:"flex",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:3}}>
+            <button onClick={exportCSV} disabled={filled.length===0} style={{padding:"7px 16px",borderRadius:10,fontSize:11,fontWeight:700,cursor:filled.length===0?"not-allowed":"pointer",background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.2)",color:filled.length===0?"rgba(255,255,255,0.15)":"#34d399",letterSpacing:"0.06em",fontFamily:"inherit",opacity:filled.length===0?0.5:1}}>↓ CSV</button>
             {(["roster","stats"] as const).map(v=>(
               <button key={v} onClick={()=>setView(v)} style={{padding:"7px 18px",borderRadius:8,fontSize:11,fontWeight:700,cursor:"pointer",background:view===v?"rgba(96,165,250,0.12)":"transparent",color:view===v?"#60a5fa":"rgba(255,255,255,0.3)",border:"none",letterSpacing:"0.08em",textTransform:"uppercase"}}>{v}</button>
             ))}

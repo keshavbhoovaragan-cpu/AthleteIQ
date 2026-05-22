@@ -99,7 +99,7 @@ export default function TradePage() {
         </div>
         <button onClick={analyze} disabled={!playerA||!playerB||loading}
           style={{width:"100%",padding:"14px",borderRadius:12,border:"none",cursor:(!playerA||!playerB)?"not-allowed":"pointer",background:(!playerA||!playerB)?"rgba(255,255,255,0.05)":"linear-gradient(135deg,#22c55e,#60a5fa)",color:(!playerA||!playerB)?"rgba(255,255,255,0.2)":"#fff",fontSize:14,fontWeight:800,letterSpacing:"0.05em",marginBottom:24,transition:"all 0.2s"}}>
-          {loading?"ANALYZING...":"ANALYZE TRADE"}
+          {loading ? (<span style={{display:"flex",alignItems:"center",gap:10,justifyContent:"center"}}><span style={{width:16,height:16,borderRadius:"50%",border:"2px solid rgba(255,255,255,0.2)",borderTopColor:"#22c55e",animation:"spin 0.8s linear infinite",display:"inline-block"}}/><span style={{color:"#22c55e"}}>ANALYZING...</span></span>) : "ANALYZE TRADE"}
         </button>
         {result&&!result.error&&(
           <div>
