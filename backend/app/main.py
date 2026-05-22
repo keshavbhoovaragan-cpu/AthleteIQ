@@ -1,10 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import players, stats, scouting, auth, rankings, analytics, trades, injuries, streaks, engine
+from app.services.database import init_db, seed_rankings, seed_injuries, get_db
 
-app = FastAPI(title="AthleteIQ API", version="3.0.0",
+app = FastAPI(title="AthleteIQ API", version="4.0.0",
     description="NBA Intelligence Platform — FastAPI + Rust + SQLite + Redis + nba_api")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+@app.on_event("startup")
+async def startup():
+    init_db()
+    conn = get_db()
+    count = conn.execute("SELECT COUNT(*) FROM season_stats").fetchone()[0]
+    inj = conn.execute("SELECT COUNT(*) FROM injuries").fetchone()[0]
+    conn.close()
+    if count == 0: seed_rankings()
+    if inj == 0: seed_injuries()
+
 app.include_router(players.router,   prefix="/api/players",   tags=["players"])
 app.include_router(stats.router,     prefix="/api/stats",     tags=["stats"])
 app.include_router(scouting.router,  prefix="/api/scouting",  tags=["scouting"])
@@ -18,7 +30,9 @@ app.include_router(engine.router,    prefix="/api/engine",    tags=["rust-engine
 
 @app.get("/api/health")
 async def health():
-    import os
-    binary = os.path.abspath("../rust-engine/target/release/fantasy-engine")
-    return {"status":"ok","version":"3.0.0","rust_engine":os.path.exists(binary),
-            "stack":["FastAPI","Rust","SQLite","Redis","nba_api","Python 3.11"]}
+    from app.services.rust_engine import _find_binary
+    conn = get_db()
+    sc = conn.execute("SELECT COUNT(*) FROM season_stats").fetchone()[0]
+    pc = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+    conn.close()
+    return {"status":"ok","version":"4.0.0","database":{"players":pc,"season_stats":sc},"rust_engine":bool(_find_binary())}
