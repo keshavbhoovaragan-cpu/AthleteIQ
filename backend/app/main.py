@@ -3,8 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import players, stats, scouting, auth, rankings, analytics, trades, injuries, streaks, engine
 from app.services.database import init_db, seed_rankings, seed_injuries, get_db
 
-app = FastAPI(title="AthleteIQ API", version="4.0.0",
-    description="NBA Intelligence Platform — FastAPI + Rust + SQLite + Redis + nba_api")
+app = FastAPI(title="AthleteIQ API", version="4.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 @app.on_event("startup")
@@ -14,8 +13,10 @@ async def startup():
     count = conn.execute("SELECT COUNT(*) FROM season_stats").fetchone()[0]
     inj = conn.execute("SELECT COUNT(*) FROM injuries").fetchone()[0]
     conn.close()
-    if count == 0: seed_rankings()
-    if inj == 0: seed_injuries()
+    if count == 0:
+        seed_rankings()
+    if inj == 0:
+        seed_injuries()
 
 app.include_router(players.router,   prefix="/api/players",   tags=["players"])
 app.include_router(stats.router,     prefix="/api/stats",     tags=["stats"])
@@ -34,5 +35,8 @@ async def health():
     conn = get_db()
     sc = conn.execute("SELECT COUNT(*) FROM season_stats").fetchone()[0]
     pc = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+    ic = conn.execute("SELECT COUNT(*) FROM injuries").fetchone()[0]
     conn.close()
-    return {"status":"ok","version":"4.0.0","database":{"players":pc,"season_stats":sc},"rust_engine":bool(_find_binary())}
+    return {"status":"ok","version":"4.0.0",
+            "database":{"players":pc,"season_stats":sc,"injuries":ic},
+            "rust_engine":bool(_find_binary())}

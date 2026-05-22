@@ -44,8 +44,8 @@ export default function AnalyticsPage() {
         </div>
         {loading?(
           <div style={{textAlign:"center",padding:80,color:"rgba(255,255,255,0.2)"}}>
-            <div style={{fontSize:14,marginBottom:6}}>Loading from SQLite cache...</div>
-            <div style={{fontSize:11,color:"rgba(255,255,255,0.12)"}}>First load fetches live from NBA.com — may take 30s</div>
+            <div style={{fontSize:14,marginBottom:6}}>Loading analytics data...</div>
+            <div style={{fontSize:11,color:"rgba(255,255,255,0.12)"}}>Fetching from SQLite database</div>
           </div>
         ):tab==="leaderboard"?(
           <div style={{background:"linear-gradient(180deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,0.015) 100%)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:18,overflow:"hidden"}}>
