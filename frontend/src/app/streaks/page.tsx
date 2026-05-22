@@ -5,7 +5,7 @@ import { searchPlayers } from "@/lib/api";
 import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
-const api = axios.create({ baseURL: "http://localhost:8000" });
+const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000" });
 
 export default function StreaksPage() {
   const [q, setQ] = useState("");

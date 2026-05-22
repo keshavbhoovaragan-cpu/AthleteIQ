@@ -4,7 +4,7 @@ import NavBar from "@/components/nav/NavBar";
 import { searchPlayers } from "@/lib/api";
 import axios from "axios";
 
-const api = axios.create({ baseURL: "http://localhost:8000" });
+const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000" });
 
 function PlayerPicker({ label, color, onSelect, selected }: any) {
   const [q, setQ] = useState("");
