@@ -158,3 +158,14 @@ cd frontend && npm install && npm run dev
 
 *Built by Keshav Bhoovaragan · Full-Stack Engineer · Info Risk Management*
 *Stack: Next.js · TypeScript · FastAPI · Python · Rust · SQLite · Redis · Bash*
+
+---
+
+## Live Deployment
+
+| Service | URL |
+|---|---|
+| **Frontend** | https://athlete-iq-jmk3.vercel.app |
+| **Backend API** | https://athleteiq-production-6bb5.up.railway.app |
+| **API Docs** | https://athleteiq-production-6bb5.up.railway.app/docs |
+| **GitHub** | https://github.com/keshavbhoovaragan-cpu/AthleteIQ |
