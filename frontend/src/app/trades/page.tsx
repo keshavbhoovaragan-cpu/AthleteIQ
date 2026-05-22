@@ -1,4 +1,3 @@
-import React from "react";
 "use client";
 import { useState } from "react";
 import NavBar from "@/components/nav/NavBar";
