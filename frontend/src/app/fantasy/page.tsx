@@ -135,6 +135,7 @@ export default function FantasyPage() {
           </div>
           <div style={{display:"flex",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:3}}>
             <button onClick={exportCSV} disabled={filled.length===0} style={{padding:"7px 16px",borderRadius:10,fontSize:11,fontWeight:700,cursor:filled.length===0?"not-allowed":"pointer",background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.2)",color:filled.length===0?"rgba(255,255,255,0.15)":"#34d399",letterSpacing:"0.06em",fontFamily:"inherit",opacity:filled.length===0?0.5:1}}>↓ CSV</button>
+            <button onClick={exportCSV} disabled={filled.length===0} style={{padding:'7px 16px',borderRadius:10,fontSize:11,fontWeight:700,cursor:filled.length===0?'not-allowed':'pointer',background:'rgba(34,197,94,0.08)',border:'1px solid rgba(34,197,94,0.2)',color:filled.length===0?'rgba(255,255,255,0.15)':'#34d399',letterSpacing:'0.06em',fontFamily:'inherit',opacity:filled.length===0?0.5:1}}>↓ CSV</button>
             {(["roster","stats"] as const).map(v=>(
               <button key={v} onClick={()=>setView(v)} style={{padding:"7px 18px",borderRadius:8,fontSize:11,fontWeight:700,cursor:"pointer",background:view===v?"rgba(96,165,250,0.12)":"transparent",color:view===v?"#60a5fa":"rgba(255,255,255,0.3)",border:"none",letterSpacing:"0.08em",textTransform:"uppercase"}}>{v}</button>
             ))}
