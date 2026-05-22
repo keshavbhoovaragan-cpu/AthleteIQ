@@ -12,7 +12,8 @@ RUN chmod +x /usr/local/bin/fantasy-engine
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ .
+RUN mkdir -p /data
 ENV RUST_BINARY=/usr/local/bin/fantasy-engine
-ENV PORT=8000
+ENV DB_PATH=/data/athleteiq.db
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/bin/sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
