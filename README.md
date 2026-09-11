@@ -169,19 +169,36 @@ cd frontend && npm install && npm run dev
 | Service | URL |
 |---|---|
 | **Frontend** | https://athlete-iq-jmk3.vercel.app |
-| **Backend API** | https://athleteiq-production-6bb5.up.railway.app |
-| **API Docs** | https://athleteiq-production-6bb5.up.railway.app/docs |
+| **Backend API** | *migrating to Render — see below* |
 | **GitHub** | https://github.com/keshavbhoovaragan-cpu/AthleteIQ |
 
-> **Status check (2026-09-10):** the Vercel frontend is up (200), but the
-> Railway backend URL above is currently returning
-> `{"status":"error","code":404,"message":"Application not found"}` — the
-> Railway service itself needs to be redeployed/relinked, and
-> `NEXT_PUBLIC_API_URL` (in `frontend/.env.local` and the Vercel project env
-> vars) updated to match the new URL once it's back. Until then the frontend
-> loads but every data-driven page will fail to fetch. This isn't "just
-> Vercel" by design — the app is two services (Vercel + Railway) — but only
-> one of the two is currently reachable.
+> **Status (2026-09-10):** the backend was on Railway; that trial ended and
+> the service was permanently torn down (`athleteiq-production-6bb5.up.railway.app`
+> now 404s for good — not a redeploy-and-it's-back situation). Moving the
+> backend to Render's free tier instead, via `render.yaml` in this repo. The
+> Vercel frontend loads fine on its own, but every data-driven page needs the
+> backend to be reachable — until the Render deploy is live and
+> `NEXT_PUBLIC_API_URL` is updated to point at it, expect empty states and
+> the NavBar's honest "OFFLINE" banner.
+
+### Deploying the backend to Render (free tier)
+
+1. Push this repo to GitHub (already done) — Render deploys straight from it.
+2. In the [Render dashboard](https://dashboard.render.com), **New +** →
+   **Blueprint**, connect the `AthleteIQ` repo. Render auto-detects
+   `render.yaml` at the repo root and configures the service from it
+   (Dockerfile path, health check, free plan) — no manual field-filling
+   needed.
+3. It'll prompt for `ANTHROPIC_API_KEY` (optional — only needed for the AI
+   agent's natural-language answers and page-navigation; everything else
+   works without it). Leave blank to skip.
+4. Deploy. First build takes a few minutes (it compiles the Rust engine).
+   Free tier sleeps after 15 min idle — the first request after a quiet
+   spell takes 30-60s to wake up, which is expected, not a bug.
+5. Once live, copy the Render URL and set it as `NEXT_PUBLIC_API_URL` in
+   both `frontend/.env.local` (local dev) and the Vercel project's
+   environment variables (production), then redeploy the Vercel frontend so
+   it picks up the change.
 
 ---
 

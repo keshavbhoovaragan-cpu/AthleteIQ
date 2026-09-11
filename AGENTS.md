@@ -22,7 +22,7 @@ frontend/    Next.js 14 app router — one page per feature under src/app/*/page
 backend/     FastAPI app — app/api/routes/*.py (routers), app/services/*.py (logic + DB), app/core/*.py (config/db/cache)
 rust-engine/ Rust fantasy-scoring binary, called via subprocess from backend/app/services/rust_engine.py
 scripts/     bash dev scripts (start, build, seed, backup)
-railway.json Backend deploy config (Railway, Dockerfile-based)
+render.yaml  Backend deploy config (Render Blueprint, Dockerfile-based)
 vercel.json  Frontend deploy config (Vercel)
 ```
 
@@ -69,18 +69,25 @@ code:
    frontend changes actually load the page in a browser, not just `tsc`/lint.
    `GET /api/health` reports DB row counts and Rust-binary availability —
    useful as a smoke test after any backend change.
-4. **Deploy** — Backend deploys to **Railway** (Docker build defined by
-   `backend/Dockerfile` + `railway.json`); frontend deploys to **Vercel**
-   (`vercel.json`, currently empty/default config). These are two separate
-   services with two separate URLs — a "live" AthleteIQ requires both to be
-   up **and** the frontend's `NEXT_PUBLIC_API_URL` env var to point at the
-   current Railway URL. Check both, not just Vercel, before calling something
-   live.
+4. **Deploy** — Backend deploys to **Render** (free web service, Docker build
+   defined by `backend/Dockerfile` + `render.yaml` — deploy via Render's
+   "New +" → "Blueprint", point it at this repo, it auto-detects
+   `render.yaml`); frontend deploys to **Vercel** (`vercel.json`, currently
+   empty/default config). These are two separate services with two separate
+   URLs — a "live" AthleteIQ requires both to be up **and** the frontend's
+   `NEXT_PUBLIC_API_URL` env var to point at the current Render URL. Check
+   both, not just Vercel, before calling something live. Render's free tier
+   spins the service down after 15 min idle — the first request after a
+   quiet spell takes 30-60s to wake it, which will show as a real (if
+   temporary) "OFFLINE" in the NavBar, not a bug.
 5. **Monitor** — `/api/health` on the backend is the source of truth for
-   backend health. A Railway URL returning
-   `{"status":"error","code":404,"message":"Application not found"}` means
-   the *service itself* is gone (deleted/renamed/unlinked), not that a route
-   is missing — that's a deploy/infra problem, not a code problem.
+   backend health. Was previously on Railway; that trial expired and the
+   service was torn down (returned `{"status":"error","code":404,"message":"Application
+   not found"}` — Railway's edge-proxy error for a service that no longer
+   exists, not a missing route). Moved to Render for a genuinely free tier.
+   If evaluating other hosts later: Koyeb was the other real contender
+   (always-on, no sleep, smaller free resources) — worth it if the Render
+   cold-start ever becomes a real problem.
 
 ## Updating the seeded season
 
@@ -126,14 +133,17 @@ adding anything that resolves players by name or ID:
 
 ## Known issue (as of 2026-09-10)
 
-`https://athleteiq-production-6bb5.up.railway.app` (the backend URL in
-`frontend/.env.local` and, presumably, the Vercel project's env vars) returns
-Railway's "Application not found" 404 — the Railway service is not currently
-live. The Vercel frontend (`https://athlete-iq-jmk3.vercel.app`) returns 200,
-but every page that calls the API will fail silently or show empty/error
-states until the backend is redeployed/relinked and the frontend's
-`NEXT_PUBLIC_API_URL` is updated to match. Don't report the app as "live" or
-"working" without checking both.
+The backend was on Railway; that trial expired and the service was torn
+down, so `https://athleteiq-production-6bb5.up.railway.app` now returns
+Railway's "Application not found" 404 permanently — it's not coming back.
+Migrating to Render (`render.yaml`, see the Deploy section above) — check
+whether that migration has actually been completed (a real Render URL
+wired into `frontend/.env.local` and Vercel's `NEXT_PUBLIC_API_URL`) before
+assuming it has. The Vercel frontend (`https://athlete-iq-jmk3.vercel.app`)
+returns 200 regardless, but every page that calls the API will fail
+silently or show empty/error states until the backend is live on its new
+host **and** the frontend's `NEXT_PUBLIC_API_URL` points at it. Don't
+report the app as "live" or "working" without checking both.
 
 ## Agent roles in this repo
 
