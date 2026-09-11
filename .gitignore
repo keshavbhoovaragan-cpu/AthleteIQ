@@ -9,3 +9,4 @@ venv/
 rust-engine/target/
 .DS_Store
 backups/
+*.tsbuildinfo
