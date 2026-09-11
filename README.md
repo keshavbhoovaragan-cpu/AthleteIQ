@@ -169,36 +169,32 @@ cd frontend && npm install && npm run dev
 | Service | URL |
 |---|---|
 | **Frontend** | https://athlete-iq-jmk3.vercel.app |
-| **Backend API** | *migrating to Render — see below* |
+| **Backend API** | https://athleteiq-s99t.onrender.com |
+| **API Docs** | https://athleteiq-s99t.onrender.com/docs |
 | **GitHub** | https://github.com/keshavbhoovaragan-cpu/AthleteIQ |
 
-> **Status (2026-09-10):** the backend was on Railway; that trial ended and
-> the service was permanently torn down (`athleteiq-production-6bb5.up.railway.app`
-> now 404s for good — not a redeploy-and-it's-back situation). Moving the
-> backend to Render's free tier instead, via `render.yaml` in this repo. The
-> Vercel frontend loads fine on its own, but every data-driven page needs the
-> backend to be reachable — until the Render deploy is live and
-> `NEXT_PUBLIC_API_URL` is updated to point at it, expect empty states and
-> the NavBar's honest "OFFLINE" banner.
+> **Status (2026-09-10):** backend migrated off Railway (trial expired,
+> service permanently torn down) onto Render's free tier — deployed via
+> `render.yaml` in this repo, confirmed live with real 2025-26 data. Render's
+> free tier sleeps after 15 min idle; the first request after a quiet spell
+> takes 30-60s to wake up (the NavBar's "OFFLINE" state during that window is
+> expected, not a bug). `NEXT_PUBLIC_API_URL` in the Vercel project's
+> environment variables still needs to be updated to the URL above — until
+> then the production frontend is still pointed at the dead Railway URL.
 
-### Deploying the backend to Render (free tier)
+### Redeploying the backend (if you ever need to)
 
-1. Push this repo to GitHub (already done) — Render deploys straight from it.
-2. In the [Render dashboard](https://dashboard.render.com), **New +** →
-   **Blueprint**, connect the `AthleteIQ` repo. Render auto-detects
-   `render.yaml` at the repo root and configures the service from it
-   (Dockerfile path, health check, free plan) — no manual field-filling
-   needed.
-3. It'll prompt for `ANTHROPIC_API_KEY` (optional — only needed for the AI
+1. In the [Render dashboard](https://dashboard.render.com), **New +** →
+   **Web Service** → connect the repo → set **Dockerfile Path** to
+   `backend/Dockerfile` and leave **Root Directory** blank (the build needs
+   repo-root context since the Dockerfile also copies from `rust-engine/`).
+2. Optionally add `ANTHROPIC_API_KEY` as an environment variable for the AI
    agent's natural-language answers and page-navigation; everything else
-   works without it). Leave blank to skip.
-4. Deploy. First build takes a few minutes (it compiles the Rust engine).
-   Free tier sleeps after 15 min idle — the first request after a quiet
-   spell takes 30-60s to wake up, which is expected, not a bug.
-5. Once live, copy the Render URL and set it as `NEXT_PUBLIC_API_URL` in
-   both `frontend/.env.local` (local dev) and the Vercel project's
-   environment variables (production), then redeploy the Vercel frontend so
-   it picks up the change.
+   works without it.
+3. Deploy. First build takes a few minutes (it compiles the Rust engine).
+4. Copy the new URL and update `NEXT_PUBLIC_API_URL` in both
+   `frontend/.env.local` (local dev) and the Vercel project's environment
+   variables (production), then redeploy the Vercel frontend.
 
 ---
 

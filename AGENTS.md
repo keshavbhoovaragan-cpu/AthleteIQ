@@ -69,17 +69,23 @@ code:
    frontend changes actually load the page in a browser, not just `tsc`/lint.
    `GET /api/health` reports DB row counts and Rust-binary availability —
    useful as a smoke test after any backend change.
-4. **Deploy** — Backend deploys to **Render** (free web service, Docker build
-   defined by `backend/Dockerfile` + `render.yaml` — deploy via Render's
-   "New +" → "Blueprint", point it at this repo, it auto-detects
-   `render.yaml`); frontend deploys to **Vercel** (`vercel.json`, currently
+4. **Deploy** — Backend deploys to **Render** (free web service:
+   `https://athleteiq-s99t.onrender.com`, Docker build from
+   `backend/Dockerfile`). `render.yaml` at the repo root documents the
+   config for reference/Blueprint use, but the working deploy was actually
+   created via Render's "New +" → "Web Service" with manual fields —
+   **Dockerfile Path**: `backend/Dockerfile`, **Root Directory**: blank (the
+   build needs repo-root context since the Dockerfile also copies from
+   `rust-engine/`). Frontend deploys to **Vercel** (`vercel.json`, currently
    empty/default config). These are two separate services with two separate
    URLs — a "live" AthleteIQ requires both to be up **and** the frontend's
-   `NEXT_PUBLIC_API_URL` env var to point at the current Render URL. Check
-   both, not just Vercel, before calling something live. Render's free tier
-   spins the service down after 15 min idle — the first request after a
-   quiet spell takes 30-60s to wake it, which will show as a real (if
-   temporary) "OFFLINE" in the NavBar, not a bug.
+   `NEXT_PUBLIC_API_URL` env var (both `frontend/.env.local` for local dev
+   and the Vercel project's env vars for production — they're independent,
+   updating one doesn't update the other) to point at the current Render
+   URL. Check both, not just Vercel, before calling something live. Render's
+   free tier spins the service down after 15 min idle — the first request
+   after a quiet spell takes 30-60s to wake it, which will show as a real
+   (if temporary) "OFFLINE" in the NavBar, not a bug.
 5. **Monitor** — `/api/health` on the backend is the source of truth for
    backend health. Was previously on Railway; that trial expired and the
    service was torn down (returned `{"status":"error","code":404,"message":"Application
@@ -134,16 +140,16 @@ adding anything that resolves players by name or ID:
 ## Known issue (as of 2026-09-10)
 
 The backend was on Railway; that trial expired and the service was torn
-down, so `https://athleteiq-production-6bb5.up.railway.app` now returns
-Railway's "Application not found" 404 permanently — it's not coming back.
-Migrating to Render (`render.yaml`, see the Deploy section above) — check
-whether that migration has actually been completed (a real Render URL
-wired into `frontend/.env.local` and Vercel's `NEXT_PUBLIC_API_URL`) before
-assuming it has. The Vercel frontend (`https://athlete-iq-jmk3.vercel.app`)
-returns 200 regardless, but every page that calls the API will fail
-silently or show empty/error states until the backend is live on its new
-host **and** the frontend's `NEXT_PUBLIC_API_URL` points at it. Don't
-report the app as "live" or "working" without checking both.
+down permanently (`athleteiq-production-6bb5.up.railway.app` 404s for good
+— not coming back). Migrated to Render: `https://athleteiq-s99t.onrender.com`,
+confirmed live with real 2025-26 data via `/api/health`. `frontend/.env.local`
+points at it. Still outstanding: the **Vercel project's** `NEXT_PUBLIC_API_URL`
+environment variable (production) needs the same update — verify this before
+assuming the production frontend is actually wired to the new backend, since
+that's a dashboard change no local file reflects. The Vercel frontend
+(`https://athlete-iq-jmk3.vercel.app`) returns 200 regardless of backend
+state — don't report the app as "live" or "working" without checking the
+backend and the Vercel env var, not just the frontend's HTTP status.
 
 ## Agent roles in this repo
 
