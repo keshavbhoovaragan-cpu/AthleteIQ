@@ -176,9 +176,9 @@ def seed_rankings():
 
 def seed_injuries():
     INJURIES = [
-        (203082,"Joel Embiid","PHI","C","Out","Knee","TBD","high"),
+        (203954,"Joel Embiid","PHI","C","Out","Knee","TBD","high"),
         (203114,"Khris Middleton","MIL","F","Out","Knee","Season","high"),
-        (1628978,"Lonzo Ball","CHI","G","Out","Knee","TBD","high"),
+        (1628366,"Lonzo Ball","CHI","G","Out","Knee","TBD","high"),
         (203500,"Steven Adams","MEM","C","Out","Knee","Season","high"),
         (1629627,"Zion Williamson","NOP","F","Out","Hamstring","2-3 weeks","high"),
         (1628384,"OG Anunoby","NYK","F","Out","Elbow","TBD","high"),

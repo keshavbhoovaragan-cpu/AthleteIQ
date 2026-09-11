@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import NavBar from "@/components/nav/NavBar";
 import { searchPlayers } from "@/lib/api";
 import axios from "axios";
@@ -8,6 +9,15 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceL
 const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000" });
 
 export default function StreaksPage() {
+  return (
+    <Suspense fallback={null}>
+      <StreaksPageContent />
+    </Suspense>
+  );
+}
+
+function StreaksPageContent() {
+  const searchParams = useSearchParams();
   const [q, setQ] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [selected, setSelected] = useState<any>(null);
@@ -26,6 +36,12 @@ export default function StreaksPage() {
     const res = await api.get(`/api/streaks/${player.id}`).catch(()=>null);
     setData(res?.data||null);setLoading(false);
   };
+
+  useEffect(() => {
+    const name = searchParams.get("player");
+    if (name) searchPlayers(name).then((r: any) => r?.data?.[0] && load(r.data[0])).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const chartData = data?.games?.slice().reverse().map((g:any,i:number)=>({
     game:i+1, fs:g.fantasy_score, pts:g.pts, date:g.date?.slice(0,5), matchup:g.matchup, wl:g.wl,

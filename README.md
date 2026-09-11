@@ -40,6 +40,7 @@ AthleteIQ is a full-stack NBA analytics platform built to demonstrate end-to-end
 | **Injury Report** | 2024-25 Out/Questionable/Day-to-Day tracker with severity filtering |
 | **Analytics** | SQLite z-score leaderboard + SQL GROUP BY position breakdowns |
 | **Compare** | Radar chart + career trajectory head-to-head comparison |
+| **Watchlist** | Star players and get alerted (in-app + optional browser notifications) when their injury status or streak changes |
 
 ---
 
@@ -122,6 +123,8 @@ cd frontend && npm install && npm run dev
 | POST | `/api/engine/score` | Rust engine — batch fantasy scoring |
 | GET | `/api/engine/benchmark` | 100k calculation timing via Rust binary |
 | GET | `/api/engine/grade/{score}` | Fantasy grade + tier for a score |
+| POST | `/api/agent/ask` | AI agent — answers fantasy questions from live SQLite data (Claude, with data-only fallback) |
+| GET | `/api/agent/status` | Whether `ANTHROPIC_API_KEY` is configured |
 | GET | `/api/health` | Stack info including Rust binary status |
 
 ---
@@ -169,3 +172,47 @@ cd frontend && npm install && npm run dev
 | **Backend API** | https://athleteiq-production-6bb5.up.railway.app |
 | **API Docs** | https://athleteiq-production-6bb5.up.railway.app/docs |
 | **GitHub** | https://github.com/keshavbhoovaragan-cpu/AthleteIQ |
+
+> **Status check (2026-09-10):** the Vercel frontend is up (200), but the
+> Railway backend URL above is currently returning
+> `{"status":"error","code":404,"message":"Application not found"}` — the
+> Railway service itself needs to be redeployed/relinked, and
+> `NEXT_PUBLIC_API_URL` (in `frontend/.env.local` and the Vercel project env
+> vars) updated to match the new URL once it's back. Until then the frontend
+> loads but every data-driven page will fail to fetch. This isn't "just
+> Vercel" by design — the app is two services (Vercel + Railway) — but only
+> one of the two is currently reachable.
+
+---
+
+## AI Agent
+
+This repo has two AI-agent layers:
+
+1. **Engineering agent** — [`AGENTS.md`](AGENTS.md) at the repo root is a
+   portable, tool-agnostic agent definition (architecture, conventions, and
+   an AI-based Product Development Lifecycle: Plan → Implement → Verify →
+   Deploy → Monitor) that any AGENTS.md-aware coding tool can read. Claude
+   Code additionally picks it up via
+   [`.claude/skills/athleteiq-agent/SKILL.md`](.claude/skills/athleteiq-agent/SKILL.md).
+2. **In-app product agent** — a floating "✦" widget on every page (bottom
+   right, not a separate page you have to navigate to) backed by
+   `POST /api/agent/ask`. It answers fantasy questions using the full roster
+   and injury data from SQLite as context for Claude, and can act: ask it to
+   "compare Luka and Jokic" or "should I trade X for Y" and it navigates you
+   straight to `/compare` or `/trades` with both players already loaded,
+   instead of making you search for them yourself. It's also multi-turn — it
+   remembers the last few messages in the conversation (sent as history on
+   each request, persisted client-side in `sessionStorage` so a refresh
+   doesn't lose it), so a follow-up like "what about his assists" resolves
+   correctly. Set `ANTHROPIC_API_KEY` on the backend to enable it; without a
+   key it still answers with a data-only response instead of erroring (just
+   without navigation, which needs the model), following the same fallback
+   pattern as the Rust engine.
+   - **Hallucination guardrails**: the model only ever sees the *complete*
+     roster (not a top-N slice) so it's never in a position to fill a gap
+     with training-data guesses about a player it half-recognizes; it's told
+     explicitly to say "I don't have that player's data" rather than guess;
+     and any player name it supplies for navigation is checked against the
+     real roster server-side before a link is built — a hallucinated or
+     misspelled name gets dropped rather than producing a broken deep link.

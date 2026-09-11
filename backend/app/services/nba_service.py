@@ -1,10 +1,19 @@
 import time
 import math
+import unicodedata
 from nba_api.stats.endpoints import playercareerstats, playergamelog, commonplayerinfo
 from nba_api.stats.static import players
 
+def _normalize(s: str) -> str:
+    # nba_api's static player list stores names with diacritics (e.g. "Nikola
+    # Jokić", "Luka Dončić"). Without stripping accents, searching the plain
+    # ASCII spelling anyone would actually type ("Jokic", "Doncic") returns
+    # nothing.
+    return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii').lower()
+
 def find_players(name: str) -> list:
-    results = [p for p in players.get_players() if name.lower() in p['full_name'].lower()][:10]
+    target = _normalize(name)
+    results = [p for p in players.get_players() if target in _normalize(p['full_name'])][:10]
     return [{"id":p['id'],"first_name":p['first_name'],"last_name":p['last_name'],"full_name":p['full_name'],"is_active":p['is_active'],"position":""} for p in results]
 
 def get_player_info(player_id: int) -> dict:
@@ -85,6 +94,19 @@ def calc_fantasy_score(s: dict) -> float:
              safe_float(s.get('blk',0))*3.0 + safe_float(s.get('fg_pct',0))*10 +
              safe_float(s.get('ft_pct',0))*5 - safe_float(s.get('tov',0))*1.0)
     return round(min(safe_float(score), 99.9), 1)
+
+def compute_streak_info(games: list, season_avg_fs: float) -> dict:
+    for g in games:
+        g["fantasy_score"] = round(calc_fantasy_score(g), 1)
+    last5 = games[:5]
+    avg5 = sum(g["fantasy_score"] for g in last5) / len(last5) if last5 else 0
+    diff5 = round(avg5 - season_avg_fs, 1)
+    if avg5 > season_avg_fs*1.20: streak, color = "🔥 On Fire", "#f59e0b"
+    elif avg5 > season_avg_fs*1.08: streak, color = "📈 Hot", "#22c55e"
+    elif avg5 < season_avg_fs*0.80: streak, color = "🥶 Ice Cold", "#60a5fa"
+    elif avg5 < season_avg_fs*0.92: streak, color = "📉 Cold", "#93c5fd"
+    else: streak, color = "➡️ Neutral", "#9ca3af"
+    return {"streak_label": streak, "color": color, "last5_avg_fs": round(avg5, 1), "diff_from_avg": diff5}
 
 def predict_next_season(seasons: list) -> dict:
     if len(seasons) < 2:

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import players, stats, scouting, auth, rankings, analytics, trades, injuries, streaks, engine
+from app.api.routes import players, stats, scouting, auth, rankings, analytics, trades, injuries, streaks, engine, agent, watchlist
 from app.services.database import init_db, seed_rankings, seed_injuries, get_db
 
 app = FastAPI(title="AthleteIQ API", version="4.0.0")
@@ -28,6 +28,8 @@ app.include_router(trades.router,    prefix="/api/trades",    tags=["trades"])
 app.include_router(injuries.router,  prefix="/api/injuries",  tags=["injuries"])
 app.include_router(streaks.router,   prefix="/api/streaks",   tags=["streaks"])
 app.include_router(engine.router,    prefix="/api/engine",    tags=["rust-engine"])
+app.include_router(agent.router,     prefix="/api/agent",     tags=["ai-agent"])
+app.include_router(watchlist.router, prefix="/api/watchlist", tags=["watchlist"])
 
 @app.get("/api/health")
 async def health():

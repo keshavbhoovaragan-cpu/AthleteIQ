@@ -1,13 +1,32 @@
 "use client";
 import NavBar from "@/components/nav/NavBar";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import PlayerSearchInline from "@/components/compare/PlayerSearchInline";
 import CompareCard from "@/components/compare/CompareCard";
 import { Player } from "@/types/player";
+import { searchPlayers } from "@/lib/api";
 
 export default function ComparePage() {
+  return (
+    <Suspense fallback={null}>
+      <ComparePageContent />
+    </Suspense>
+  );
+}
+
+function ComparePageContent() {
+  const searchParams = useSearchParams();
   const [playerA, setPlayerA] = useState<Player | null>(null);
   const [playerB, setPlayerB] = useState<Player | null>(null);
+
+  useEffect(() => {
+    const a = searchParams.get("a");
+    const b = searchParams.get("b");
+    if (a) searchPlayers(a).then((r: any) => r?.data?.[0] && setPlayerA(r.data[0])).catch(() => {});
+    if (b) searchPlayers(b).then((r: any) => r?.data?.[0] && setPlayerB(r.data[0])).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <main style={{ minHeight: "100vh", background: "#0a0a0f" }}>

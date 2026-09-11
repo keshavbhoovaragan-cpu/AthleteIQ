@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import NavBar from "@/components/nav/NavBar";
 import { searchPlayers } from "@/lib/api";
 import axios from "axios";
@@ -48,10 +49,27 @@ function PlayerPicker({ label, color, onSelect, selected }: any) {
 }
 
 export default function TradePage() {
+  return (
+    <Suspense fallback={null}>
+      <TradePageContent />
+    </Suspense>
+  );
+}
+
+function TradePageContent() {
+  const searchParams = useSearchParams();
   const [playerA, setPlayerA] = useState<any>(null);
   const [playerB, setPlayerB] = useState<any>(null);
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const give = searchParams.get("give");
+    const receive = searchParams.get("receive");
+    if (give) searchPlayers(give).then((r: any) => r?.data?.[0] && setPlayerA(r.data[0])).catch(() => {});
+    if (receive) searchPlayers(receive).then((r: any) => r?.data?.[0] && setPlayerB(r.data[0])).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const analyze = async () => {
     if (!playerA||!playerB) return;
