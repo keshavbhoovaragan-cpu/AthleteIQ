@@ -66,7 +66,7 @@ def get_career_stats(player_id: int) -> dict:
         })
     return {"seasons": seasons}
 
-def get_recent_games(player_id: int, season: str = "2024-25") -> dict:
+def get_recent_games(player_id: int, season: str = "2025-26") -> dict:
     time.sleep(0.6)
     logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, timeout=15)
     df = logs.get_data_frames()[0]

@@ -82,6 +82,27 @@ code:
    the *service itself* is gone (deleted/renamed/unlinked), not that a route
    is missing — that's a deploy/infra problem, not a code problem.
 
+## Updating the seeded season
+
+`SEASON_DATA` in `database.py` and `SEASONS_DATA` in `frontend/src/app/nba/page.tsx`
+are hand-maintained snapshots, not live-fetched — that's a deliberate tradeoff
+(zero-infrastructure demo data vs. always-current). When a new season becomes
+"current" (e.g. 2025-26 → 2026-27), don't hand-type numbers — pull them from
+live `nba_api` the same way the 2025-26 update did:
+`nba_service.get_career_stats(player_id)` for each of the 36 `PLAYERS` (filter
+its `seasons` list for the new season key) feeds `SEASON_DATA`, and
+`nba_api.stats.endpoints.leagueleaders.LeagueLeaders(season=..., per_mode48="PerGame", stat_category_abbreviation=...)`
+for `PTS`/`AST`/`REB`/`STL`/`BLK` feeds the `nba/page.tsx` leaders lists (this
+one is league-wide, not limited to the 36-player roster, so it'll surface
+players not in `PLAYERS`). A player with no row for the new season isn't a bug
+to "fix" by carrying forward old numbers — check whether they actually played
+(some seasons a star misses entirely to injury) before assuming a missing
+season is a scraping error. Then update every hardcoded default-season
+parameter and "current season" UI label across both repos — grep for the old
+season string, since it's duplicated in several places rather than centralized
+(`rankings.py`, `analytics.py`, `agent.py`, `ai_agent.py`, `nba_service.py`,
+and several frontend page defaults/labels).
+
 ## Data integrity notes
 
 Two real bugs were found and fixed here that are worth knowing about before

@@ -23,7 +23,7 @@ export default function InjuriesPage() {
     <main style={{minHeight:"100vh"}}>
       <NavBar/>
       <div style={{maxWidth:900,margin:"0 auto",padding:"36px 24px",position:"relative",zIndex:1}}>
-        <PageHeader eyebrow="2024-25 Season" title="Injury Report" titleGradient="red" subtitle="Live from SQLite database — Out, Questionable, Day-to-Day"/>
+        <PageHeader eyebrow="2025-26 Season" title="Injury Report" titleGradient="red" subtitle="Live from SQLite database — Out, Questionable, Day-to-Day"/>
         <div style={{display:"flex",gap:8,marginBottom:24,flexWrap:"wrap"}}>
           {["All","Out","Questionable","Day-to-Day"].map(f=>(<button key={f} onClick={()=>setFilter(f)} style={{padding:"6px 16px",borderRadius:20,fontSize:11,fontWeight:700,cursor:"pointer",background:filter===f?(STATUS_COLORS[f]||"#f87171"):"var(--surface)",color:filter===f?"#000":"var(--text-muted)",border:filter===f?`1px solid ${STATUS_COLORS[f]||"#f87171"}`:"1px solid var(--border)",transition:"all 0.15s",fontFamily:"inherit"}}>
             {f}{f!=="All"&&counts[f]!==undefined&&<span style={{marginLeft:5,opacity:0.8}}>({counts[f]})</span>}

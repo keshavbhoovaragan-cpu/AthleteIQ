@@ -6,7 +6,7 @@ router = APIRouter()
 def grade(s): return "S" if s>=60 else "A" if s>=50 else "B" if s>=40 else "C" if s>=30 else "D"
 
 @router.get("/")
-async def get_rankings(season: str = "2024-25", pos: str = "All"):
+async def get_rankings(season: str = "2025-26", pos: str = "All"):
     conn = get_db()
     rows = conn.execute("""
         SELECT p.id, p.name, p.position, ss.team, ss.pts, ss.ast, ss.reb,
@@ -26,10 +26,10 @@ async def get_rankings(season: str = "2024-25", pos: str = "All"):
             if pos not in ("All","G","F","C") and ppos!=pos: continue
         p["grade"] = grade(p["fantasy_score"] or 0)
         result.append(p)
-    return {"players": result, "season": season, "available_seasons": ["2024-25","2023-24","2022-23","2021-22","2020-21"]}
+    return {"players": result, "season": season, "available_seasons": ["2025-26","2024-25","2023-24","2022-23","2021-22","2020-21"]}
 
 @router.get("/leaders")
-async def get_leaders(season: str = "2024-25", stat: str = "pts", pos: str = "All", limit: int = 15):
+async def get_leaders(season: str = "2025-26", stat: str = "pts", pos: str = "All", limit: int = 15):
     valid = {"pts","ast","reb","stl","blk","fg_pct","fantasy_score"}
     if stat not in valid: stat = "pts"
     conn = get_db()
@@ -54,4 +54,4 @@ async def get_leaders(season: str = "2024-25", stat: str = "pts", pos: str = "Al
 
 @router.get("/seasons")
 async def get_seasons():
-    return {"seasons": ["2024-25","2023-24","2022-23","2021-22","2020-21"]}
+    return {"seasons": ["2025-26","2024-25","2023-24","2022-23","2021-22","2020-21"]}

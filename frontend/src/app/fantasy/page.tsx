@@ -131,7 +131,7 @@ export default function FantasyPage() {
           <div>
             <div style={{fontSize:10,color:"rgba(96,165,250,0.6)",letterSpacing:"0.2em",fontWeight:700,marginBottom:6}}>ESPN-STYLE · POSITION LOCKED</div>
             <h1 style={{fontSize:34,fontWeight:900,lineHeight:1,letterSpacing:"-0.02em",marginBottom:6,background:"linear-gradient(135deg,#60a5fa 0%,#a78bfa 50%,#f472b6 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Fantasy Roster</h1>
-            <p style={{color:"rgba(255,255,255,0.28)",fontSize:13}}>2024-25 · Standard scoring · Real NBA positions from NBA.com</p>
+            <p style={{color:"rgba(255,255,255,0.28)",fontSize:13}}>2025-26 · Standard scoring · Real NBA positions from NBA.com</p>
           </div>
           <div style={{display:"flex",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:10,padding:3}}>
             <button onClick={exportCSV} disabled={filled.length===0} style={{padding:"7px 16px",borderRadius:10,fontSize:11,fontWeight:700,cursor:filled.length===0?"not-allowed":"pointer",background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.2)",color:filled.length===0?"rgba(255,255,255,0.15)":"#34d399",letterSpacing:"0.06em",fontFamily:"inherit",opacity:filled.length===0?0.5:1}}>↓ CSV</button>

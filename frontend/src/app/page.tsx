@@ -13,7 +13,7 @@ const FEATURES = [
   { label:"Streak Detector",href:"/streaks",   icon:"🔥", color:"#fb923c", desc:"Hot/cold detection with interactive score timeline" },
   { label:"Trade Analyzer", href:"/trades",    icon:"⇄",  color:"#34d399", desc:"Head-to-head trade evaluation with instant recommendation" },
   { label:"Draft Board",    href:"/draft",     icon:"📋", color:"#818cf8", desc:"Draft rankings by value tier — build your pick board" },
-  { label:"Injury Report",  href:"/injuries",  icon:"🏥", color:"#f87171", desc:"2024-25 injury tracker — Out, Questionable, Day-to-Day" },
+  { label:"Injury Report",  href:"/injuries",  icon:"🏥", color:"#f87171", desc:"2025-26 injury tracker — Out, Questionable, Day-to-Day" },
   { label:"Analytics",      href:"/analytics", icon:"📊", color:"#f472b6", desc:"SQLite z-score analysis and SQL position breakdowns" },
   { label:"Compare",        href:"/compare",   icon:"⚖️", color:"#34d399", desc:"Radar charts and career trajectory head-to-head" },
 ];
@@ -72,7 +72,7 @@ export default function Home() {
             <div style={{textAlign:"center",marginBottom:56}}>
               <div className={mounted?"fade-up":""} style={{display:"inline-flex",alignItems:"center",gap:8,padding:"6px 16px",borderRadius:20,background:"rgba(96,165,250,0.07)",border:"1px solid rgba(96,165,250,0.14)",marginBottom:28,boxShadow:"0 0 20px rgba(96,165,250,0.08)"}}>
                 <span style={{width:6,height:6,borderRadius:"50%",background:"#22c55e",display:"block",animation:"pulse-glow 2s infinite"}}/>
-                <span style={{fontSize:10,color:"rgba(96,165,250,0.85)",fontWeight:700,letterSpacing:"0.14em"}}>LIVE · 2024-25 NBA · 9 FEATURES · RUST ENGINE</span>
+                <span style={{fontSize:10,color:"rgba(96,165,250,0.85)",fontWeight:700,letterSpacing:"0.14em"}}>LIVE · 2025-26 NBA · 9 FEATURES · RUST ENGINE</span>
               </div>
               <h1 className={mounted?"fade-up-2":""} style={{letterSpacing:"-0.045em",lineHeight:0.9,marginBottom:20}}>
                 <span style={{display:"block",fontSize:"clamp(56px,8vw,88px)",fontWeight:900,background:"linear-gradient(180deg,#fff 0%,rgba(255,255,255,0.5) 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>NBA</span>

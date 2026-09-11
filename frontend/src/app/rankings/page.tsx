@@ -5,12 +5,12 @@ import PageHeader from "@/components/ui/PageHeader";
 import axios from "axios";
 
 const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000" });
-const SEASONS = ["2024-25","2023-24","2022-23","2021-22","2020-21"];
+const SEASONS = ["2025-26","2024-25","2023-24","2022-23","2021-22","2020-21"];
 const POS_GROUPS = ["All","G","F","C","G-F","F-C"];
 const SORT_OPTS = [{value:"fantasy_score",label:"Fantasy Score"},{value:"pts",label:"Points"},{value:"ast",label:"Assists"},{value:"reb",label:"Rebounds"},{value:"stl",label:"Steals"},{value:"blk",label:"Blocks"}];
 
 export default function RankingsPage() {
-  const [season, setSeason] = useState("2024-25");
+  const [season, setSeason] = useState("2025-26");
   const [posFilter, setPosFilter] = useState("All");
   const [sortBy, setSortBy] = useState("fantasy_score");
   const [players, setPlayers] = useState<any[]>([]);
@@ -37,7 +37,7 @@ export default function RankingsPage() {
         <div style={{display:"flex",gap:6,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}>
           <span style={{fontSize:10,color:"var(--text-dim)",fontWeight:700,letterSpacing:"0.1em",marginRight:4}}>SEASON</span>
           {SEASONS.map(s=>(<button key={s} onClick={()=>setSeason(s)} style={{padding:"5px 14px",borderRadius:20,fontSize:12,fontWeight:700,cursor:"pointer",background:season===s?"#f59e0b":"var(--surface)",color:season===s?"#000":"var(--text-muted)",border:season===s?"1px solid #f59e0b":"1px solid var(--border)",transition:"all 0.15s",fontFamily:"inherit",boxShadow:season===s?"0 0 12px rgba(245,158,11,0.3)":"none"}}>
-            {s}{s==="2024-25"&&<span style={{marginLeft:5,fontSize:9,padding:"1px 4px",borderRadius:3,background:"rgba(34,197,94,0.2)",color:"#22c55e",fontWeight:800}}>LIVE</span>}
+            {s}{s==="2025-26"&&<span style={{marginLeft:5,fontSize:9,padding:"1px 4px",borderRadius:3,background:"rgba(34,197,94,0.2)",color:"#22c55e",fontWeight:800}}>LIVE</span>}
           </button>))}
         </div>
         <div style={{display:"flex",gap:12,marginBottom:20,flexWrap:"wrap",alignItems:"center"}}>

@@ -55,7 +55,7 @@ export default function DraftPage() {
       <div style={{position:"fixed",bottom:"10%",right:"5%",width:400,height:400,background:"radial-gradient(circle,rgba(96,165,250,0.03) 0%,transparent 70%)",pointerEvents:"none",zIndex:0}}/>
       <div style={{maxWidth:1060,margin:"0 auto",padding:"40px 24px",position:"relative",zIndex:1}}>
         <div style={{marginBottom:28}}>
-          <div style={{fontSize:10,color:"rgba(96,165,250,0.6)",letterSpacing:"0.2em",fontWeight:700,marginBottom:6}}>2024-25 SEASON</div>
+          <div style={{fontSize:10,color:"rgba(96,165,250,0.6)",letterSpacing:"0.2em",fontWeight:700,marginBottom:6}}>2025-26 SEASON</div>
           <h1 style={{fontSize:34,fontWeight:900,lineHeight:1,letterSpacing:"-0.02em",marginBottom:6,background:"linear-gradient(135deg,#60a5fa 0%,#a78bfa 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Draft Board</h1>
           <p style={{color:"rgba(255,255,255,0.28)",fontSize:13}}>Fantasy draft rankings · Click + PICK to add to your board · Filter by position and value tier</p>
         </div>

@@ -12,6 +12,93 @@ const STAT_CATS = [
 ];
 
 const SEASONS_DATA: Record<string, Record<string, any[]>> = {
+  "2025-26": {
+    pts:[
+      {id:1629029,name:"Luka Doncic",team:"LAL",pos:"G-F",value:33.5},
+      {id:1628983,name:"Shai Gilgeous-Alexander",team:"OKC",pos:"G",value:31.1},
+      {id:1630162,name:"Anthony Edwards",team:"MIN",pos:"G",value:28.8},
+      {id:1627759,name:"Jaylen Brown",team:"BOS",pos:"G-F",value:28.7},
+      {id:1630178,name:"Tyrese Maxey",team:"PHI",pos:"G",value:28.3},
+      {id:202695,name:"Kawhi Leonard",team:"LAC",pos:"F",value:27.9},
+      {id:1628378,name:"Donovan Mitchell",team:"CLE",pos:"G",value:27.9},
+      {id:203999,name:"Nikola Jokic",team:"DEN",pos:"C",value:27.7},
+      {id:1626164,name:"Devin Booker",team:"PHX",pos:"G",value:26.1},
+      {id:1628973,name:"Jalen Brunson",team:"NYK",pos:"G",value:26.0},
+      {id:201142,name:"Kevin Durant",team:"HOU",pos:"F",value:26.0},
+      {id:1627750,name:"Jamal Murray",team:"DEN",pos:"G",value:25.4},
+      {id:1641705,name:"Victor Wembanyama",team:"SAS",pos:"F-C",value:25.0},
+      {id:1630166,name:"Deni Avdija",team:"POR",pos:"F",value:24.2},
+      {id:1627783,name:"Pascal Siakam",team:"IND",pos:"F",value:24.0},
+    ],
+    ast:[
+      {id:203999,name:"Nikola Jokic",team:"DEN",pos:"C",value:10.7},
+      {id:1630595,name:"Cade Cunningham",team:"DET",pos:"G",value:9.9},
+      {id:1629029,name:"Luka Doncic",team:"LAL",pos:"G-F",value:8.3},
+      {id:201935,name:"James Harden",team:"CLE",pos:"G",value:8.0},
+      {id:1630552,name:"Jalen Johnson",team:"ATL",pos:"F",value:7.9},
+      {id:1642264,name:"Stephon Castle",team:"SAS",pos:"G",value:7.4},
+      {id:2544,name:"LeBron James",team:"LAL",pos:"F",value:7.2},
+      {id:1642268,name:"Isaiah Collier",team:"UTA",pos:"G",value:7.2},
+      {id:1630163,name:"LaMelo Ball",team:"CHA",pos:"G",value:7.1},
+      {id:1627750,name:"Jamal Murray",team:"DEN",pos:"G",value:7.1},
+      {id:1628973,name:"Jalen Brunson",team:"NYK",pos:"G",value:6.8},
+      {id:1630166,name:"Deni Avdija",team:"POR",pos:"F",value:6.7},
+      {id:201566,name:"Russell Westbrook",team:"SAC",pos:"G",value:6.7},
+      {id:1628983,name:"Shai Gilgeous-Alexander",team:"OKC",pos:"G",value:6.6},
+      {id:1630178,name:"Tyrese Maxey",team:"PHI",pos:"G",value:6.6},
+    ],
+    reb:[
+      {id:203999,name:"Nikola Jokic",team:"DEN",pos:"C",value:12.9},
+      {id:1626157,name:"Karl-Anthony Towns",team:"NYK",pos:"F-C",value:11.9},
+      {id:1642270,name:"Donovan Clingan",team:"POR",pos:"C",value:11.6},
+      {id:203497,name:"Rudy Gobert",team:"MIN",pos:"C",value:11.5},
+      {id:1641705,name:"Victor Wembanyama",team:"SAS",pos:"F-C",value:11.5},
+      {id:1631105,name:"Jalen Duren",team:"DET",pos:"C",value:10.5},
+      {id:1630552,name:"Jalen Johnson",team:"ATL",pos:"F",value:10.3},
+      {id:1628389,name:"Bam Adebayo",team:"MIA",pos:"F-C",value:10.0},
+      {id:1630596,name:"Evan Mobley",team:"CLE",pos:"C",value:9.0},
+      {id:1642276,name:"Kel'el Ware",team:"MIA",pos:"C",value:9.0},
+      {id:1631096,name:"Chet Holmgren",team:"OKC",pos:"F-C",value:8.9},
+      {id:1630578,name:"Alperen Sengun",team:"HOU",pos:"C",value:8.9},
+      {id:1629011,name:"Mitchell Robinson",team:"NYK",pos:"F-C",value:8.8},
+      {id:1631217,name:"Moussa Diabate",team:"CHA",pos:"F",value:8.7},
+      {id:1631094,name:"Paolo Banchero",team:"ORL",pos:"F",value:8.4},
+    ],
+    stl:[
+      {id:1641709,name:"Ausar Thompson",team:"DET",pos:"G-F",value:2.0},
+      {id:1630700,name:"Dyson Daniels",team:"ATL",pos:"G",value:2.0},
+      {id:1641717,name:"Cason Wallace",team:"OKC",pos:"G",value:1.9},
+      {id:202695,name:"Kawhi Leonard",team:"LAC",pos:"F",value:1.9},
+      {id:1630178,name:"Tyrese Maxey",team:"PHI",pos:"G",value:1.9},
+      {id:1629029,name:"Luka Doncic",team:"LAL",pos:"G-F",value:1.6},
+      {id:1627739,name:"Kris Dunn",team:"LAC",pos:"G",value:1.6},
+      {id:1628384,name:"OG Anunoby",team:"NYK",pos:"G-F",value:1.6},
+      {id:1642263,name:"Reed Sheppard",team:"HOU",pos:"G",value:1.5},
+      {id:1628378,name:"Donovan Mitchell",team:"CLE",pos:"G",value:1.5},
+      {id:1631157,name:"Ryan Rollins",team:"MIL",pos:"G",value:1.5},
+      {id:1630530,name:"Trey Murphy III",team:"NOP",pos:"F",value:1.5},
+      {id:1641708,name:"Amen Thompson",team:"HOU",pos:"G-F",value:1.5},
+      {id:1630692,name:"Jordan Goodwin",team:"PHX",pos:"G",value:1.5},
+      {id:1630595,name:"Cade Cunningham",team:"DET",pos:"G",value:1.4},
+    ],
+    blk:[
+      {id:1641705,name:"Victor Wembanyama",team:"SAS",pos:"F-C",value:3.1},
+      {id:1630643,name:"Jay Huff",team:"IND",pos:"C",value:1.9},
+      {id:1631096,name:"Chet Holmgren",team:"OKC",pos:"F-C",value:1.9},
+      {id:1630596,name:"Evan Mobley",team:"CLE",pos:"C",value:1.7},
+      {id:1642270,name:"Donovan Clingan",team:"POR",pos:"C",value:1.7},
+      {id:203497,name:"Rudy Gobert",team:"MIN",pos:"C",value:1.6},
+      {id:1626167,name:"Myles Turner",team:"MIL",pos:"F-C",value:1.6},
+      {id:1630191,name:"Isaiah Stewart",team:"DET",pos:"F-C",value:1.6},
+      {id:1629057,name:"Robert Williams III",team:"POR",pos:"F-C",value:1.5},
+      {id:1641750,name:"Ryan Kalkbrenner",team:"CHA",pos:"C",value:1.5},
+      {id:1630567,name:"Scottie Barnes",team:"TOR",pos:"G-F",value:1.5},
+      {id:1641824,name:"Matas Buzelis",team:"CHI",pos:"F",value:1.5},
+      {id:1642274,name:"Yves Missi",team:"NOP",pos:"C",value:1.5},
+      {id:1629674,name:"Neemias Queta",team:"BOS",pos:"C",value:1.3},
+      {id:1628401,name:"Derrick White",team:"BOS",pos:"G",value:1.3},
+    ],
+  },
   "2024-25": {
     pts:[
       {id:1628983,name:"Shai Gilgeous-Alexander",team:"OKC",pos:"G",  value:32.7},
@@ -537,13 +624,13 @@ const ALL_TIME: Record<string,any[]> = {
   ],
 };
 
-const CURRENT_SEASONS = ["2024-25","2023-24","2022-23","2021-22","2020-21"];
+const CURRENT_SEASONS = ["2025-26","2024-25","2023-24","2022-23","2021-22","2020-21"];
 const POS_FILTERS = ["All","G","F","C","G-F","F-C"];
 
 export default function NBAPage() {
   const [activeStat, setActiveStat] = useState("pts");
   const [era, setEra] = useState<"current"|"alltime">("current");
-  const [activeSeason, setActiveSeason] = useState("2024-25");
+  const [activeSeason, setActiveSeason] = useState("2025-26");
   const [posFilter, setPosFilter] = useState("All");
 
   const posMatch=(pos:string)=>posFilter==="All"||pos===posFilter||pos.includes(posFilter);
@@ -568,7 +655,7 @@ export default function NBAPage() {
               <span style={{fontSize:10,color:"var(--text-dim)",fontWeight:700,letterSpacing:"0.1em"}}>SEASON</span>
               {CURRENT_SEASONS.map(s=>(
                 <button key={s} onClick={()=>setActiveSeason(s)} style={{padding:"4px 11px",borderRadius:20,fontSize:11,fontWeight:700,cursor:"pointer",background:activeSeason===s?"#f59e0b":"transparent",color:activeSeason===s?"#000":"var(--text-muted)",border:activeSeason===s?"1px solid #f59e0b":"1px solid var(--border)",transition:"all 0.15s",fontFamily:"inherit",boxShadow:activeSeason===s?"0 0 10px rgba(245,158,11,0.3)":"none"}}>
-                  {s}{s==="2024-25"&&<span style={{marginLeft:4,fontSize:8,color:"#22c55e",fontWeight:900}}>●</span>}
+                  {s}{s==="2025-26"&&<span style={{marginLeft:4,fontSize:8,color:"#22c55e",fontWeight:900}}>●</span>}
                 </button>
               ))}
             </div>

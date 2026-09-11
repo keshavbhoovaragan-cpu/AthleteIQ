@@ -12,7 +12,7 @@ class HistoryMessage(BaseModel):
 
 class AskRequest(BaseModel):
     question: str
-    season: str = "2024-25"
+    season: str = "2025-26"
     history: list[HistoryMessage] = []
 
 

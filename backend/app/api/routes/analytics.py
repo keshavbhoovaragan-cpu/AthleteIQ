@@ -7,7 +7,7 @@ router = APIRouter()
 def grade(s): return "S" if s>=60 else "A" if s>=50 else "B" if s>=40 else "C" if s>=30 else "D"
 
 @router.get("/leaderboard")
-async def leaderboard(season: str = "2024-25"):
+async def leaderboard(season: str = "2025-26"):
     conn = get_db()
     rows = conn.execute("""
         SELECT p.id as player_id, p.name, p.position, ss.team,
@@ -29,7 +29,7 @@ async def leaderboard(season: str = "2024-25"):
     return {"players": result, "season": season, "source": "SQLite + Python z-score analysis"}
 
 @router.get("/position-breakdown")
-async def position_breakdown(season: str = "2024-25"):
+async def position_breakdown(season: str = "2025-26"):
     conn = get_db()
     rows = conn.execute("""
         SELECT CASE WHEN p.position IN ('G','G-F') THEN 'Guards'

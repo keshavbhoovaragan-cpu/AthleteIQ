@@ -128,7 +128,7 @@ def _fallback_answer(question: str, season: str) -> dict:
     }
 
 
-def ask(question: str, season: str = "2024-25", history: list[dict] | None = None) -> dict:
+def ask(question: str, season: str = "2025-26", history: list[dict] | None = None) -> dict:
     client = _client()
     if not client:
         return _fallback_answer(question, season)
