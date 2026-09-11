@@ -9,7 +9,10 @@ async def get_streak(player_id: int):
     conn = get_db()
     row = conn.execute("SELECT * FROM season_stats WHERE player_id=? ORDER BY season DESC LIMIT 1", (player_id,)).fetchone()
     conn.close()
-    recent = get_recent_games(player_id)
+    try:
+        recent = get_recent_games(player_id)
+    except Exception:
+        recent = {"games": []}
     games = recent.get("games", [])
     if not games:
         return {"error": "No recent game data available for this player"}

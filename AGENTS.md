@@ -116,6 +116,15 @@ season string, since it's duplicated in several places rather than centralized
 (`rankings.py`, `analytics.py`, `agent.py`, `ai_agent.py`, `nba_service.py`,
 and several frontend page defaults/labels).
 
+Don't forget `RECENT_GAMES` (also in `database.py`, seeded into the
+`recent_games` table) — the last-10-games log that powers Streaks and the
+Watchlist's streak detection. It goes stale independently of `SEASON_DATA`
+(games happen continuously, not once a season) and there's no scheduled
+refresh — pull fresh games the same way, via
+`nba_service.get_recent_games(player_id)` for each of the 36 `PLAYERS`, when
+the existing data starts looking dated. See the next section for why this
+table has to be SQLite-seeded at all rather than fetched live on request.
+
 ## Data integrity notes
 
 Two real bugs were found and fixed here that are worth knowing about before
@@ -136,6 +145,26 @@ adding anything that resolves players by name or ID:
   hardcoded player data anywhere (seed lists, fixtures, examples), verify the
   id against `find_players(name)` rather than typing one from memory — this
   is an easy, silent way to corrupt a join.
+- **`stats.nba.com` blocks/throttles requests from cloud hosting IPs.**
+  Confirmed on both Railway and Render — any live `nba_api` call
+  (`get_recent_games`, and `get_career_stats`/`get_player_info` as a
+  fallback) works fine from a residential/office network but fails from the
+  deployed backend. This is exactly why `season_stats` and `players` are
+  seeded into SQLite rather than fetched live — but `get_recent_games` (the
+  last-10-games log behind Streaks and Watchlist) wasn't converted when that
+  happened, and shipped broken: `/api/streaks/{id}` 500'd on every call in
+  production while working perfectly in local dev, which is what actually
+  flagged this. Fixed by seeding `recent_games` the same way (see "Updating
+  the seeded season" above) and making `get_recent_games` SQLite-first with
+  the live call as a fallback for anyone not in the seeded roster — same
+  pattern as `/api/players/{id}/career`. **The lesson**: "works locally" is
+  not evidence a live-`nba_api`-dependent route works in production — if you
+  add or touch anything that calls `get_recent_games`, `get_career_stats`,
+  `get_player_info`, or `find_players`, check whether the code path is
+  actually SQLite-first for the seeded roster before trusting a local test.
+  Every direct caller of these should also fail gracefully (try/except) even
+  after being made SQLite-first, since a player outside the roster still
+  falls through to the live path.
 
 ## Known issue (as of 2026-09-10)
 

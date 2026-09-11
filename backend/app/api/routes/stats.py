@@ -5,7 +5,10 @@ router = APIRouter()
 
 @router.get("/{player_id}/predict")
 async def predict(player_id: int):
-    data = get_career_stats(player_id)
+    try:
+        data = get_career_stats(player_id)
+    except Exception:
+        data = {"seasons": []}
     seasons = data.get("seasons", [])
     prediction = predict_next_season(seasons)
     return {"player_id": player_id, "prediction": prediction}

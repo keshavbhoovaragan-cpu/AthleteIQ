@@ -67,6 +67,21 @@ def get_career_stats(player_id: int) -> dict:
     return {"seasons": seasons}
 
 def get_recent_games(player_id: int, season: str = "2025-26") -> dict:
+    # SQLite-first, same pattern as career stats: stats.nba.com blocks/throttles
+    # requests from cloud hosting IPs (confirmed on both Railway and Render), so
+    # the live path below only actually works from a non-cloud network. For the
+    # seeded roster, real game logs are in the DB and this never needs to run.
+    from app.services.database import get_db
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT game_date as date, matchup, wl, pts, ast, reb, stl, blk, fg_pct, min "
+        "FROM recent_games WHERE player_id=? ORDER BY game_order ASC",
+        (player_id,)
+    ).fetchall()
+    conn.close()
+    if rows:
+        return {"games": [dict(r) for r in rows]}
+
     time.sleep(0.6)
     logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, timeout=15)
     df = logs.get_data_frames()[0]
